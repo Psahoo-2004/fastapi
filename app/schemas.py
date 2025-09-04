@@ -26,6 +26,7 @@ class UserOut(BaseModel):
     id:int
     email:EmailStr
     created_at:datetime
+    phone_number:Optional[str]
 
     class config():
         orm_mode=True
