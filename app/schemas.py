@@ -26,7 +26,7 @@ class UserOut(BaseModel):
     id:int
     email:EmailStr
     created_at:datetime
-    # phone_number:Optional[str]
+    phone_number:Optional[str]
 
     class config():
         orm_mode=True
@@ -45,7 +45,7 @@ class PostOut(BaseModel):
     votes:int
 
 class UserCreate(UserBase):
-    # phone_number:Optional[str]=None
+    phone_number:Optional[str]=None
     pass
 
 
