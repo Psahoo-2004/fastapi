@@ -10,11 +10,12 @@ router=APIRouter(
 
 @router.post("/votes")
 def vote(vote:schemas.Vote,db:session=Depends(get_db),cuerrent_user:int=Depends(oauth2.get_current_user)):
+    post=db.query(model.Post).filter(model.Post.id==vote.post_id).first()
+    if not post:
+        raise HTTPException(status_code=404,detail=f"Post with {vote.post_id} does not exist")
     vote_query=db.query(model.Vote).filter(model.Vote.post_id == vote.post_id,model.Vote.user_id == cuerrent_user.id)
     found_vote=vote_query.first()
-    if  not (db.query(model.Vote).filter(model.Vote.post_id!=cuerrent_user.id).first()):
-        raise HTTPException(status_code=404,detail="Not Found")
-    if vote.dir ==1:
+    if vote.dir == 1:
         if found_vote:
             raise HTTPException(status_code=409,detail="Vote already exists")
         new_vote=model.Vote(post_id =vote.post_id,user_id=cuerrent_user.id)
