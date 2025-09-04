@@ -44,7 +44,8 @@ class PostOut(BaseModel):
     votes:int
 
 class UserCreate(UserBase):
-    pass 
+    phone_number:Optional[int]=None
+    pass
 
 
 
