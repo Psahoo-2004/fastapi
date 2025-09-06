@@ -13,10 +13,10 @@ def user_login(user_credential:OAuth2PasswordRequestForm=Depends(),db:Session=De
     
     UL=db.query(model.User).filter( model.User.email == user_credential.username).first()
     if not UL:
-        raise HTTPException(status_code=404,detail="Invalid credentials")
+        raise HTTPException(status_code=401,detail="Invalid credentials")
     verify1=utils.verify(user_credential.password , UL.password)
     if not verify1:
-        raise HTTPException(status_code=404,detail="Invalid credentials")
+        raise HTTPException(status_code=401,detail="Invalid credentials")
     
     access_token=oauth2.create_access_token(data={"user_id":UL.id})
     return {"access_token":access_token,"token_type":"bearer"}

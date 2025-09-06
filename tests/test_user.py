@@ -19,15 +19,19 @@ def test_login_user(client,test_user):
     assert res.status_code == 200
 
 @pytest.mark.parametrize("email,password,status_code",[
-    ('wrongemail@gmail.com','password@1234',404),
-    ('hasheduser1@gmail.com','wrongpassword',404),
-    ('wrongemail@gamil.com','wrongpassword',404),
-    (None,'password@1234',404),
-    ('hasheduser1@gamil.com',None,404)
+    ('wrongemail@gmail.com','password@1234',401),
+    ('hasheduser1@gmail.com','wrongpassword',401),
+    ('wrongemail@gamil.com','wrongpassword',401),
+    (None,'password@1234',422),
+    ('hasheduser1@gamil.com',None,422)
 ])
 def test_incorrect_login(client,test_user,email,password,status_code):
-    res=client.post("/login",data={"username":email,"password": password})
+    data = {}
+    if email is not None:
+        data["username"] = email
+    if password is not None:
+        data["password"] = password
+    res=client.post("/login",data=data)
     assert res.status_code == status_code
-    assert res.json().get('detail') == 'Invalid credentials'
 
 
