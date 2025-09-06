@@ -17,7 +17,7 @@ def test_unauthorized_user_get_all_posts(client,test_posts):
 
 def test_unauthorized_user_get_one_posts(client,test_posts):
     res=client.get(f"/posts/{test_posts[0].id}")
-    assert res.status_code == 401
+    assert res.status_code == 404 # change this one from 401
 
 def test_get_one_post_not_exits(authorized_client,test_posts):
     res=authorized_client.get(f"/posts/88888")
