@@ -26,3 +26,7 @@ app.include_router(user.router)
 app.include_router(votes.router)
 app.include_router(auth.router)
 # app.include_router(calculations.router)
+
+@app.get("/")
+def home():
+    return {"message":"Hello CI/CD is successfully delployed"}
