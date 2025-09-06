@@ -13,7 +13,7 @@ def user_login(user_credential:OAuth2PasswordRequestForm=Depends(),db:Session=De
     
     UL=db.query(model.User).filter( model.User.email == user_credential.username).first()
     if not UL:
-        raise HTTPException(status_code=404,detail="Invalid credential")
+        raise HTTPException(status_code=404,detail="Invalid credentials")
     verify1=utils.verify(user_credential.password , UL.password)
     if not verify1:
         raise HTTPException(status_code=404,detail="Invalid credentials")

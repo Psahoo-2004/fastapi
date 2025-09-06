@@ -18,7 +18,7 @@ class UserBase(BaseModel):
 class Users(UserBase):
     id:int
     created_at:datetime
-
+    
     class config():
         orm_mode=True
 
@@ -43,6 +43,8 @@ class Posts(PostBase):
 class PostOut(BaseModel):
     post:Posts
     votes:int
+    class config():
+        orm_mode=True
 
 class UserCreate(UserBase):
     phone_number:Optional[str]=None

@@ -4,11 +4,11 @@ from sqlalchemy.orm import session
 from ..database import get_db
 
 router=APIRouter(
-    #prefix="/votes",
+    prefix="/votes",
     tags=["Vote"]
 )
 
-@router.post("/votes")
+@router.post("/")
 def vote(vote:schemas.Vote,db:session=Depends(get_db),cuerrent_user:int=Depends(oauth2.get_current_user)):
     post=db.query(model.Post).filter(model.Post.id==vote.post_id).first()
     if not post:

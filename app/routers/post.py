@@ -7,27 +7,23 @@ from .. database import get_db
 from .. model import Post,Vote
 
 router=APIRouter(
-    # prefix="/posts",
+    prefix="/posts",
     tags=['Post']
 )
 
-@router.get("/")
-def home():
-    return "This is my first Code of Line"
-
-@router.get("/posts",response_model=list[schemas.PostOut])
+@router.get("/",response_model=list[schemas.PostOut])
 def get_post(db:Session=Depends(get_db),current_user:int=Depends(oauth2.get_current_user)):
     # posts=db.query(Post).filter(Post.owner_id==current_user.id)
     results=db.query(Post,func.count(Vote.post_id).label("votes")).join(Vote,Vote.post_id == Post.id,isouter=True).group_by(Post.id).all()
     print(results)
     if not results:
-        raise HTTPException(status_code=403,detail="Post not found")
+        raise HTTPException(status_code=404,detail="Post not found")
     return [
     {"post": post, "votes": votes} 
     for post, votes in results
     ]
 
-@router.post("/posts",response_model=schemas.Posts)
+@router.post("/",response_model=schemas.Posts)
 def create_post(post:schemas.PostCreate,db:Session=Depends(get_db),current_user:int=Depends(oauth2.get_current_user)):
     CP=Post(owner_id=current_user.id,**post.model_dump())
     print(CP)
@@ -36,7 +32,7 @@ def create_post(post:schemas.PostCreate,db:Session=Depends(get_db),current_user:
     db.refresh(CP)
     return CP
 
-@router.get("/posts/{id}",response_model=schemas.PostOut)
+@router.get("/{id}",response_model=schemas.PostOut)
 def get_post_by_id(id:int,db:Session=Depends(get_db),current_user:int=Depends(oauth2.get_current_user)):
     # QP=db.query(Post).filter(Post.id==id).first()
     QP=db.query(Post,func.count(Vote.post_id).label("votes")).join(Vote,Vote.post_id == Post.id,isouter=True).group_by(Post.id).filter(Post.id==id).first()
@@ -49,7 +45,7 @@ def get_post_by_id(id:int,db:Session=Depends(get_db),current_user:int=Depends(oa
     
 
 
-@router.put("/posts/{id}",response_model=schemas.Posts)
+@router.put("/{id}",response_model=schemas.Posts)
 def update_post(id:int,post:schemas.PostCreate,db:Session=Depends(get_db),current_user:int=Depends(oauth2.get_current_user)):
     UP=db.query(Post).filter(Post.id==id).first()
     if not UP:
@@ -63,7 +59,7 @@ def update_post(id:int,post:schemas.PostCreate,db:Session=Depends(get_db),curren
     db.refresh(UP)
     return UP
 
-@router.delete("/posts/{id}",response_model=schemas.Posts)
+@router.delete("/{id}",response_model=schemas.Posts)
 def delete_post(id:int,db:Session=Depends(get_db),current_user:int=Depends(oauth2.get_current_user)):
     DP=db.query(Post).filter(Post.id==id).first()
     if not DP:
