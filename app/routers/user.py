@@ -42,6 +42,9 @@ def update_user(users:schemas.UserCreate,id:int,db:Session=Depends(get_db),curre
     if UU:
         for key,value in users.model_dump().items():
             setattr(UU,key,value)
+        checkuser=db.query(User).filter(User.email==users.email).first()
+        if checkuser:
+            raise HTTPException(status_code=409,detail="This email is used by another user")
         db.commit()
         db.refresh(UU)
         return UU
