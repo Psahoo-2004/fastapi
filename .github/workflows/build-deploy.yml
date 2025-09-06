@@ -54,7 +54,7 @@ jobs:
                 echo "DockerHub username: ${{ secrets.DOCKER_HUB_USERNAME }}"
             - name: Build and push
               id: docker_build
-              uses: docker/build-push-action@v3
+              uses: docker/build-push-action@v4
               with:
                 context: .
                 file: ./Dockerfile
