@@ -7,7 +7,7 @@ from .config import settings
 
 
 
-model.Base.metadata.create_all(bind=engine)
+# model.Base.metadata.create_all(bind=engine)
  
 app=FastAPI()
 
