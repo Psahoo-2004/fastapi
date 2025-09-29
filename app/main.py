@@ -6,7 +6,7 @@ from .routers import post, user, votes, auth
 from .config import settings
 
 # ✅ Create tables after all models are imported
-model.Base.metadata.create_all(bind=engine)
+# model.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
