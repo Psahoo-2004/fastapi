@@ -19,7 +19,7 @@ class User(Base):
     email=Column(String,index=True,nullable=False,unique=True)
     password=Column(String,index=True,nullable=False)
     created_at=Column(TIMESTAMP(timezone=True),server_default='now()',index=True,nullable=False)
-    phone_number=Column(String)
+    phone_number=Column(String) 
 
 class Vote(Base):
     __tablename__="vote"

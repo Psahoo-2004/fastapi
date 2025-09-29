@@ -58,3 +58,4 @@ def delete_user(id:int,db:Session=Depends(get_db),current_user:int=Depends(oauth
         db.commit()
         return DU
     raise HTTPException(status_code=404,detail="User does not found")
+
